@@ -1,2 +1,2 @@
 PIRATERIA A LA PIRATERIA
-(código fuente completo y modifícalo si quieres we)
+(código fuente completo y si quieres, lo tomas y lo modificas we, es bien entretenido we)
