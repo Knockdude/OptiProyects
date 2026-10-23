@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OptiProjects</title>
+    <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png">
+    
+    <!-- LÍNEA QUE UNE EL CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="overlay">
+        <div class="title">
+            <span></span>
+            <button onclick="closeOverlay()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+                </svg>
+            </button>
+        </div>
+        <article class="box"></article>
+        <div class="throbber">⟳</div>
+    </div>
+
+    <div class="search box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffffAA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+        </svg>
+        <input id="optiSearch" placeholder="Buscar...">
+    </div>
+
+    <main>
+        <section class="list box">
+            <div class="boxTitle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12h.01" /><path d="M3 18h.01" /><path d="M3 6h.01" /><path d="M8 12h13" /><path d="M8 18h13" /><path d="M8 6h13" />
+                </svg>
+                <span>Mix</span>
+            </div>
+            <ul class="items"></ul>
+        </section>
+
+        <section class="downloads box">
+            <div class="boxTitle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14" /><path d="m19 12-7 7-7-7" />
+                </svg>
+                <span>Descargas</span>
+            </div>
+            <div class="downloadButtons"></div>
+        </section>
+    </main>
+
+    <aside class="left">
+        <img src="logo.png" draggable="false" width="208" height="32" alt="OptiProjects">
+        <nav>
+            <ul class="categories box"></ul>
+        </nav>
+    </aside>
+
+    <span class="dmca">DMCA: <a href="?t=DMCA&a=dmca" id="dmcaLink">consultasopti@gmail.com</a></span>
+
+    <!-- LÍNEA QUE UNE EL JAVASCRIPT -->
+    <script src="app.js"></script>
+</body>
+</html>
