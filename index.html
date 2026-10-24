@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,8 +7,6 @@
     <title>OptiProjects</title>
     <link href="https://fonts.bunny.net/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="favicon.png">
-    
-    <!-- LÍNEA QUE UNE EL CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,9 +14,10 @@
     <div id="overlay">
         <div class="title">
             <span></span>
-            <button onclick="closeOverlay()">
+            <button onclick="closeOverlay()" aria-label="Cerrar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+                    <path d="M18 6 6 18"/>
+                    <path d="m6 6 12 12"/>
                 </svg>
             </button>
         </div>
@@ -27,16 +27,22 @@
 
     <div class="search box">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffffAA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
         </svg>
-        <input id="optiSearch" placeholder="Buscar...">
+        <input id="optiSearch" type="search" placeholder="Buscar...">
     </div>
 
     <main>
         <section class="list box">
             <div class="boxTitle">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12h.01" /><path d="M3 18h.01" /><path d="M3 6h.01" /><path d="M8 12h13" /><path d="M8 18h13" /><path d="M8 6h13" />
+                    <path d="M3 12h.01"/>
+                    <path d="M3 18h.01"/>
+                    <path d="M3 6h.01"/>
+                    <path d="M8 12h13"/>
+                    <path d="M8 18h13"/>
+                    <path d="M8 6h13"/>
                 </svg>
                 <span>Mix</span>
             </div>
@@ -46,7 +52,8 @@
         <section class="downloads box">
             <div class="boxTitle">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 5v14" /><path d="m19 12-7 7-7-7" />
+                    <path d="M12 5v14"/>
+                    <path d="m19 12-7 7-7-7"/>
                 </svg>
                 <span>Descargas</span>
             </div>
@@ -61,9 +68,11 @@
         </nav>
     </aside>
 
-    <span class="dmca">DMCA: <a href="?t=DMCA&a=dmca" id="dmcaLink">consultasopti@gmail.com</a></span>
+    <span class="dmca">
+        DMCA:
+        <a href="?t=DMCA&a=dmca" id="dmcaLink">consultasopti@gmail.com</a>
+    </span>
 
-    <!-- LÍNEA QUE UNE EL JAVASCRIPT -->
     <script src="app.js"></script>
 </body>
 </html>
