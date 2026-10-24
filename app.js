@@ -19,7 +19,7 @@ var content = [
     },
     {
         title: "Celulares",
-        description: "Juegos y aplicaciones para celulares Android",
+        description: "Juegos y aplicaciones para celulares",
         items: [
             {
                 name: "LiteCraft PE",
@@ -27,11 +27,11 @@ var content = [
                 downloads: [
                     {
                         text: "Descargar LiteCraft PE móvil",
-                        link: "PEGA_AQUI_EL_LINK_DE_LITECRAFT_MOVIL"
+                        link: ""
                     },
                     {
                         text: "Descargar LiteCraft PE PC",
-                        link: "PEGA_AQUI_EL_LINK_DE_LITECRAFT_PC"
+                        link: ""
                     }
                 ]
             }
@@ -40,7 +40,6 @@ var content = [
 ];
 
 var defaultCategory = 0;
-var mainContainer = document.querySelector("main");
 var categoryContainer = document.querySelector("ul.categories");
 var itemContainer = document.querySelector("ul.items");
 var buttonContainer = document.querySelector("div.downloadButtons");
@@ -48,100 +47,75 @@ var downloadsContainer = document.querySelector("section.downloads");
 var categoryDescription = document.querySelector(".boxTitle span");
 var searchBox = document.getElementById("optiSearch");
 
-var currentCategory = undefined;
-var selectedItem = undefined;
+var currentCategory;
+var selectedItem;
 var renderedItems = [];
 var renderedElements = [];
 var searchTimer = null;
-var lastSearchValue = "";
-
-function childIndex(parent, child) {
-    for (; child && child.parentNode !== parent;) {
-        child = child.parentNode;
-    }
-
-    if (!child) return -1;
-
-    var children = parent.children;
-
-    for (var i = 0; i < children.length; i++) {
-        if (children[i] === child) return i;
-    }
-
-    return -1;
-}
 
 function createCategories() {
-    if (!content || !content.length) return;
+    categoryContainer.innerHTML = "";
 
-    var fragment = document.createDocumentFragment();
-
-    for (var t = 0; t < content.length; t++) {
+    content.forEach(function(category, index) {
         var li = document.createElement("li");
-        li.textContent = content[t].title;
-        fragment.appendChild(li);
-    }
-
-    categoryContainer.appendChild(fragment);
+        li.textContent = category.title;
+        li.dataset.index = index;
+        categoryContainer.appendChild(li);
+    });
 }
 
 categoryContainer.addEventListener("click", function(e) {
-    var idx = childIndex(categoryContainer, e.target);
+    var li = e.target.closest("li");
 
-    if (idx !== -1) changeCategory(idx);
+    if (!li || !categoryContainer.contains(li)) return;
+
+    changeCategory(Number(li.dataset.index));
 });
 
 function changeCategory(idx) {
-    if (idx === currentCategory) return;
-
-    searchBox.value = "";
-    lastSearchValue = "";
-    itemContainer.innerHTML = "";
-    buttonContainer.innerHTML = "";
-    downloadsContainer.style.display = "";
-
-    if (currentCategory !== undefined) {
-        categoryContainer.children[currentCategory]
-            .classList.remove("selected");
-    }
-
-    categoryContainer.children[idx].classList.add("selected");
-
-    categoryDescription.textContent = content[idx].description;
-
-    createItems(content[idx].items);
+    if (!content[idx]) return;
 
     currentCategory = idx;
     selectedItem = undefined;
+    searchBox.value = "";
 
-    if (content[idx].items.length > 0) {
-        selectItem(content[idx].items[0], 0);
+    Array.from(categoryContainer.children).forEach(function(li, i) {
+        li.classList.toggle("selected", i === idx);
+    });
+
+    categoryDescription.textContent = content[idx].description;
+
+    downloadsContainer.style.display = "";
+    buttonContainer.innerHTML = "";
+    buttonContainer.classList.remove("multiple");
+
+    createItems(content[idx].items);
+
+    if (renderedItems.length) {
+        selectItem(renderedItems[0], 0);
+    } else {
+        showPlaceholder("Próximamente");
     }
 }
 
-function addTag(element, text, className) {
+function addTag(element, text) {
     var span = document.createElement("span");
+    span.className = "tag";
     span.textContent = text;
-    span.className = className;
     element.appendChild(span);
 }
 
-function buildItemLi(item) {
+function buildItemLi(item, index) {
     var li = document.createElement("li");
-    var span = document.createElement("span");
+    var name = document.createElement("span");
 
-    span.className = "name";
-    span.textContent = item.name;
-    li.appendChild(span);
+    name.className = "name";
+    name.textContent = item.name;
+    li.appendChild(name);
 
-    if (item.tag !== undefined) {
-        addTag(li, item.tag, "tag");
+    if (item.tag) {
+        addTag(li, item.tag);
     }
-
-    var index = renderedItems.length;
-
-    renderedItems.push(item);
-    renderedElements.push(li);
 
     li.addEventListener("click", function() {
         selectItem(item, index);
@@ -151,38 +125,49 @@ function buildItemLi(item) {
 }
 
 function createItems(items) {
+    itemContainer.innerHTML = "";
     renderedItems = [];
     renderedElements = [];
-    itemContainer.innerHTML = "";
 
-    if (!items || !items.length) return;
+    items.forEach(function(item, index) {
+        renderedItems.push(item);
 
-    var fragment = document.createDocumentFragment();
+        var li = buildItemLi(item, index);
+        renderedElements.push(li);
+        itemContainer.appendChild(li);
+    });
+}
 
-    for (var t = 0; t < items.length; t++) {
-        fragment.appendChild(buildItemLi(items[t]));
-    }
+function showPlaceholder(message) {
+    buttonContainer.innerHTML = "";
+    buttonContainer.classList.remove("multiple");
 
-    itemContainer.appendChild(fragment);
+    var placeholder = document.createElement("a");
+    placeholder.className = "placeholder";
+    placeholder.textContent = message;
+    placeholder.href = "#";
+
+    placeholder.addEventListener("click", function(e) {
+        e.preventDefault();
+    });
+
+    buttonContainer.appendChild(placeholder);
 }
 
 function selectItem(item, idx) {
-    if (idx === selectedItem) return;
+    if (!item || !renderedElements[idx]) return;
+
+    if (selectedItem !== undefined &&
+        renderedElements[selectedItem]) {
+        renderedElements[selectedItem].classList.remove("selected");
+    }
+
+    selectedItem = idx;
+    renderedElements[idx].classList.add("selected");
 
     buttonContainer.innerHTML = "";
     buttonContainer.classList.remove("multiple");
     downloadsContainer.style.display = "";
-
-    if (renderedElements[idx]) {
-        renderedElements[idx].classList.add("selected");
-    }
-
-    if (
-        selectedItem !== undefined &&
-        renderedElements[selectedItem]
-    ) {
-        renderedElements[selectedItem].classList.remove("selected");
-    }
 
     var downloads = item.downloads || (
         item.link
@@ -193,45 +178,84 @@ function selectItem(item, idx) {
             : []
     );
 
+    if (!downloads.length) {
+        showPlaceholder("Próximamente");
+        return;
+    }
+
     if (downloads.length > 1) {
         buttonContainer.classList.add("multiple");
     }
 
-    if (downloads.length > 0) {
-        downloads.forEach(function(download) {
-            var btn = document.createElement("a");
+    downloads.forEach(function(download) {
+        var btn = document.createElement("a");
 
-            btn.textContent = download.text;
+        btn.textContent = download.text;
+
+        if (download.link) {
             btn.href = download.link;
             btn.target = "_blank";
             btn.rel = "noopener noreferrer";
-            btn.style.cursor = "pointer";
+        } else {
+            btn.href = "#";
 
-            buttonContainer.appendChild(btn);
-        });
-    } else {
-        var placeholder = document.createElement("a");
+            btn.addEventListener("click", function(e) {
+                e.preventDefault();
+                alert("Este enlace de descarga todavía no está configurado.");
+            });
+        }
 
-        placeholder.className = "placeholder";
-        placeholder.textContent = "Próximamente";
-        buttonContainer.appendChild(placeholder);
-    }
-
-    selectedItem = idx;
+        buttonContainer.appendChild(btn);
+    });
 }
 
-function onSearchInput() {
-    if (searchBox.value === lastSearchValue) return;
+function search(query) {
+    var normalized = query.toLowerCase().trim();
+    var filtered = [];
 
+    content.forEach(function(category, categoryIndex) {
+        category.items.forEach(function(item) {
+            if (item.name.toLowerCase().includes(normalized)) {
+                filtered.push({
+                    item: item,
+                    categoryIndex: categoryIndex
+                });
+            }
+        });
+    });
+
+    currentCategory = undefined;
+    selectedItem = undefined;
+
+    Array.from(categoryContainer.children).forEach(function(li) {
+        li.classList.remove("selected");
+    });
+
+    downloadsContainer.style.display = "";
+
+    categoryDescription.textContent = filtered.length
+        ? "Resultados de búsqueda"
+        : "Búsqueda - Sin resultados";
+
+    createItems(filtered.map(function(result) {
+        return result.item;
+    }));
+
+    if (renderedItems.length) {
+        selectItem(renderedItems[0], 0);
+    } else {
+        showPlaceholder("Sin resultados");
+    }
+}
+
+searchBox.addEventListener("input", function() {
     clearTimeout(searchTimer);
 
     searchTimer = setTimeout(function() {
-        if (searchBox.value === lastSearchValue) return;
+        var query = searchBox.value.trim();
 
-        lastSearchValue = searchBox.value;
-
-        if (searchBox.value.trim() !== "") {
-            search(searchBox.value);
+        if (query) {
+            search(query);
         } else {
             changeCategory(
                 currentCategory === undefined
@@ -240,53 +264,11 @@ function onSearchInput() {
             );
         }
     }, 150);
-}
-
-searchBox.addEventListener("input", onSearchInput);
-
-function search(query) {
-    itemContainer.innerHTML = "";
-    buttonContainer.innerHTML = "";
-    buttonContainer.classList.remove("multiple");
-
-    query = query.toLowerCase().trim();
-
-    var filtered = [];
-
-    for (var i = 0; i < content.length; i++) {
-        for (var j = 0; j < content[i].items.length; j++) {
-            var item = content[i].items[j];
-
-            if (item.name.toLowerCase().indexOf(query) !== -1) {
-                filtered.push(item);
-            }
-        }
-    }
-
-    currentCategory = undefined;
-
-    Array.from(categoryContainer.children).forEach(function(category) {
-        category.classList.remove("selected");
-    });
-
-    if (filtered.length) {
-        categoryDescription.textContent = "Resultados de búsqueda";
-
-        createItems(filtered);
-        selectItem(renderedItems[0], 0);
-    } else {
-        categoryDescription.textContent = "Búsqueda - Sin resultados";
-        downloadsContainer.style.display = "none";
-    }
-}
+});
 
 function closeOverlay() {
     document.getElementById("overlay").style.display = "none";
 }
-
-searchBox.value = "";
-createCategories();
-changeCategory(defaultCategory);
 
 var dmcaLink = document.getElementById("dmcaLink");
 
@@ -296,3 +278,6 @@ if (dmcaLink) {
         alert("DMCA: consultasopti@gmail.com");
     });
 }
+
+createCategories();
+changeCategory(defaultCategory);
